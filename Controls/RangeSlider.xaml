@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="AmazonScrape.RangeSlider"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AmazonScrape"
+             x:Name="RangeSliderXControl"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid HorizontalAlignment ="Stretch" Style="{StaticResource GridStyle}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width=".5*"/>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height=".2*"/>
+            <RowDefinition Height=".75*"/>            
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height=".2*"/>
+            <RowDefinition Height=".4*"/>
+            <RowDefinition Height=".2*"/>
+            <RowDefinition Height=".3*"/>
+        </Grid.RowDefinitions>
+        
+        <Border Grid.Row="0"
+                Grid.ColumnSpan="7"
+                Grid.RowSpan="7"
+                Opacity="1"
+                BorderThickness="5"
+                Margin="2"
+                CornerRadius="15">
+            
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFFFFF" Offset="0"/>
+                    <GradientStop Color="#666666" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+
+        <TextBlock Name="Header" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" Style="{StaticResource TextBlockStyle}" Text="{Binding ElementName=RangeSliderXControl,Path=HeaderText}"/>
+        <Slider Name="LowSlider" Grid.Row="2" Grid.Column="2" Orientation="Vertical" Maximum="100" IsSnapToTickEnabled="True" IsTabStop="False" TickFrequency="1" Style="{StaticResource SliderStyle}" />
+        <TextBlock Grid.Row="4" Grid.Column="3" FontSize="12" Style="{StaticResource TextBlockStyle}"> to </TextBlock>
+        <Slider Name="HighSlider" Grid.Row="2" Grid.Column="4" Orientation="Vertical" Maximum="100" IsSnapToTickEnabled="True" IsTabStop="False" TickFrequency="1" Value="100" Style="{StaticResource SliderStyle}" />
+        <local:TextBoxPlus x:Name="LowText" Grid.Row="4" Grid.Column="2" IsNumericOnly="True" Style="{StaticResource TextBoxPlusXStyle}"/>
+        <local:TextBoxPlus x:Name="HighText" Grid.Row="4" Grid.Column="4" IsNumericOnly="True"   Text="100" Style="{StaticResource TextBoxPlusXStyle}"/>
+        
+    </Grid>
+</UserControl>

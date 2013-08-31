@@ -1,0 +1,28 @@
+﻿
+Summary:
+
+Amazon screen scraper that provides useful searching and sorting capabilities.
+Specify criteria like minimum review count, desired price range, and required review distribution 
+(e.g. "require that results have no more than 3% one star reviews and no fewer than 50% five star reviews).
+Results populate a sortable grid that shows product image, name, Prime eligibility, price range, review score, review count, and review distribution. 
+Convenient buttons open returned products in a browser window so you can take a closer look. Written in C# / WPF.
+
+Details:
+
+Amazon intentionally limits the ways in which you can sort search results to ensure that new and less popular products have visibility. Otherwise, 
+everyone would search by a combination of high review count + high average review score + review distribution heavily leaning towards 5-stars, 
+and smaller sellers or new products probably wouldn't get as much attention. 
+The goal of this program is to allow you to search Amazon on your terms, so you no longer have to endlessly scroll through results to get to what you want.
+
+Limitations:
+
+For speed and simplicity's sake, the program does not take advantage of the enormous product category hierarchy that Amazon uses to classify its products. 
+The disadvantage is that eventually, your search results will start becoming less relevant. While this problem can't be completely eliminate, you can
+use the "Match All Search Terms" checkbox to keep the search focused.
+
+Another limitation is that, because the program simply parses search results, the program still has to load results whether they're relevant or not.
+So in a sense, it's searching how a person would, but at a vastly increased speed (and in the background, so you can do other things).
+
+Bugs:
+	Hitting "enter" to search on the Match All Search Terms checkbox doesn't invoke a search
+	Sometimes resizing the result grid columns causes the grid to become unresponsive. I can't figure out how to reliably reproduce this. Possibly disallow resizing?

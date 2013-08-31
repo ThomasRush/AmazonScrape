@@ -1,0 +1,190 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:AmazonScrape">
+
+    <!-- TextBlock -->
+    <Style TargetType="TextBlock" x:Key="TextBlockStyle">
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="Opacity" Value="1"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="TextAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="{x:Static local:Constants.DEFAULT_LARGE_TEXT_SIZE}"/>
+    </Style>
+
+    <!-- Button -->
+    <Style TargetType="Button" x:Key="ButtonStyle">
+        <Setter Property="Background" Value="#AAAAFF"/>
+        <Setter Property="Foreground" Value="#000000"/>
+        <Setter Property="FontSize" Value="{x:Static local:Constants.DEFAULT_BUTTON_FONT_SIZE}"/>
+                
+    </Style>
+
+    <!-- Label -->
+    <Style TargetType="Label" x:Key="LabelStyle">
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="FontSize" Value="{x:Static local:Constants.DEFAULT_LARGE_TEXT_SIZE}"/>
+    </Style>
+
+    <!-- Properties for the auto-scrolling status message textbox
+         that displays items that did not meet the user's criteria -->
+    <Style TargetType="TextBox" x:Key="StatusTextBoxStyle">
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="AcceptsReturn" Value="True"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Visible"/>
+        <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="IsEnabled" Value="False"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="FontSize" Value="{x:Static local:Constants.DEFAULT_LARGE_TEXT_SIZE}"/>
+    </Style>    
+    
+    <!-- Regular TextBox -->
+    <Style TargetType="TextBox" x:Key="TextBoxStyle">
+        <Setter Property="TextAlignment" Value="Center"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect ShadowDepth="0" Color="#6666FF" Opacity="0" BlurRadius="10"/>                
+            </Setter.Value>
+        </Setter>
+        
+        <!-- Gimmicky fade-out effect for the control highlight dropshadow -->
+        <Style.Triggers>
+            <Trigger Property="IsFocused" Value="True">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation To="1.0" Storyboard.TargetProperty="(Effect).Opacity" Duration="00:00:00"/>                            
+                        </Storyboard>
+                    </BeginStoryboard>                    
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation To="0.0" Storyboard.TargetProperty="(Effect).Opacity" Duration="00:00:01"/>
+                            
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>                
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Rangeslider -->
+    <Style TargetType="local:RangeSlider" x:Key="RangeSliderXStyle">
+
+    </Style>
+
+    <!-- Score Distribution Slider -->
+    <Style TargetType="local:ScoreDistributionControl" x:Key="ScoreDistributionControlStyle">
+        <Setter Property="HorizontalAlignment"  Value="Stretch"/>
+        <Setter Property="VerticalAlignment"  Value="Stretch"/>
+    </Style>
+
+    <!-- TextBoxPlus -->
+    <Style TargetType="local:TextBoxPlus" x:Key="TextBoxPlusXStyle">
+        <Setter Property="FontSize" Value="{x:Static local:Constants.DEFAULT_MEDIUM_TEXT_SIZE}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <!-- Grid -->
+    <Style TargetType="Grid" x:Key="GridStyle">
+        <Setter Property="HorizontalAlignment"  Value="Stretch"/>
+        <Setter Property="VerticalAlignment"  Value="Stretch"/>
+    </Style>
+
+    
+    <!--                      DATA GRID STYLES                  -->
+    <Style TargetType="local:DataGridPlus" x:Key="DataGridPlusStyle">
+        <Setter Property="AlternationCount" Value="2" />
+        <Setter Property="HorizontalAlignment"  Value="Stretch"/>
+        <Setter Property="VerticalAlignment"  Value="Stretch"/>
+        <Setter Property="FontSize" Value="{x:Static local:Constants.DEFAULT_LARGE_TEXT_SIZE}"/>
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#565656" Offset="0"/>
+                    <GradientStop Color="#C0C0C0" Offset="1"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="DataGridColumnHeader" x:Key="DataGridColumnHeaderStyle">
+        <Setter Property="FontSize" Value="{x:Static local:Constants.DEFAULT_SMALL_TEXT_SIZE}"/>
+    </Style>
+    
+    <!-- Create an alternating color style for the result rows. Using default windows colors in case user  -->
+    <Style TargetType="{x:Type DataGridRow}">
+        <Style.Triggers>
+            <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlLightBrushKey}}"></Setter>
+            </Trigger>
+            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlDarkBrushKey}}"></Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style TargetType="{x:Type TextBlock}" x:Key="DataGridSmallTextStyle">
+        <Setter Property="FontSize" Value="{x:Static local:Constants.DEFAULT_SMALL_TEXT_SIZE}"/>        
+    </Style>
+
+    <Style TargetType="{x:Type TextBlock}" x:Key="DataGridMediumTextStyle">
+        <Setter Property="FontSize" Value="{x:Static local:Constants.DEFAULT_MEDIUM_TEXT_SIZE}"/>
+    </Style>    
+    
+    <Style TargetType="{x:Type TextBlock}" x:Key="DataGridLargeTextStyle">
+        <Setter Property="FontSize" Value="{x:Static local:Constants.DEFAULT_LARGE_TEXT_SIZE}"/>
+    </Style>
+
+    <Style TargetType="CheckBox" x:Key="CheckBoxStyle">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect ShadowDepth="0" Color="#6666FF" Opacity="0" BlurRadius="10"/>
+            </Setter.Value>
+        </Setter>
+
+        <!-- Gimmicky fade-out effect for the control highlight dropshadow -->
+        <Style.Triggers>
+            <Trigger Property="IsFocused" Value="True">
+                <Trigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation To="1.0" Storyboard.TargetProperty="(Effect).Opacity" Duration="00:00:00"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.EnterActions>
+                <Trigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation To="0.0" Storyboard.TargetProperty="(Effect).Opacity" Duration="00:00:01"/>
+
+                        </Storyboard>
+                    </BeginStoryboard>
+                </Trigger.ExitActions>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Slider -->
+    <Style TargetType="Slider" x:Key="SliderStyle">
+        <Setter Property="HorizontalAlignment"  Value="Center"/>
+        <Setter Property="VerticalAlignment"  Value="Stretch"/>
+        <Setter Property="Margin" Value="2"/>
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#BBBBBB" Offset="0"/>
+                    <GradientStop Color="#DDDDDD" Offset="1"/>
+                </LinearGradientBrush>                
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

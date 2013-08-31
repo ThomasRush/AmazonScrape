@@ -1,0 +1,37 @@
+﻿
+TODO:
+
+Refactor classes so they are easy to test. Use interfaces where appropriate to allow dependency injection.
+Get rid of the logging service we have right now. It's not working and unnecessary for the purposes of this program.
+
+Export function?
+
+Testing plan:
+
+	----------------------
+	Scrape/Parse tests:  |
+	==============================================================
+	+ Pass bad search terms (URL string too long, etc.). Try to break URL encode.
+	+ Full page of results
+	+ Partial page of results
+	+ Result page with no results
+
+	+ Result item with "broken" (not catchable via regex) data.
+		One for each piece of data being collected
+
+	+ Result page with "broken" result count + 
+		any other page-level values being extracted
+
+	--------------------------
+	Data type / value tests:  |
+	=================================================================
+	+ Validate numeric range and its subclasses (doublerange, intrange)
+		Try to create an instance of type "double" AND "Double" (value/reference)
+
+	----------------
+	Control tests: |
+	=================================================================
+
+	TODO
+
+	=================================================================
