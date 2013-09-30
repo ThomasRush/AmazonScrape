@@ -21,8 +21,9 @@ namespace AmazonScrape
         public const double DEFAULT_SMALL_TEXT_SIZE = 10.0;
         public const double DEFAULT_BUTTON_FONT_SIZE = 12.0;
 
-        // URLS and parameters (used by Scraper)
+        // URLS and parameters (used by Scraper/Parser)
         // -------------------------------------------------------------------
+        public const string BASE_URL = @"http://www.amazon.com";
         public const string SEARCH_URL = 
             @"http://www.amazon.com/s/field-keywords=";
         public const string SEARCH_URL_PAGE_PARAM = @"&page=";        
