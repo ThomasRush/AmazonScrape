@@ -381,8 +381,18 @@ namespace AmazonScrape
             if (!productURLMatch.Success)
             { return null; }
 
-            // TODO: Does this implicitly delimit the result?
-            return new Uri(productURLMatch.Value);
+            // Amazon supplies the relative product URL. Prepend the base URL.
+            string result = Constants.BASE_URL + productURLMatch.Value;
+
+            try
+            {
+                return new Uri(result);
+            }
+            catch
+            {
+                return null;
+            }
+
         }
 
         /// <summary>
