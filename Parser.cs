@@ -410,9 +410,15 @@ namespace AmazonScrape
             if (!imageURLPatternMatch.Success)
             { return null; }
 
-            Uri imageURL = new Uri(imageURLPatternMatch.Value);
-
-            return Scraper.DownloadWebImage(imageURL);
+            try
+            {
+                Uri imageURL = new Uri(imageURLPatternMatch.Value);
+                return Scraper.DownloadWebImage(imageURL);
+            } catch
+            {
+                return null;
+            }
+            
         }
 
     } // end class
