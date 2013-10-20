@@ -381,8 +381,17 @@ namespace AmazonScrape
             if (!productURLMatch.Success)
             { return null; }
 
-            // Amazon supplies the relative product URL. Prepend the base URL.
-            string result = Constants.BASE_URL + productURLMatch.Value;
+            string result = "";
+
+            // Amazon SOMETIMES supplies a relative URL (I don't know what determines this),
+            // If the base URL is not present, prepend it.
+            if (!productURLMatch.Value.Contains(Constants.BASE_URL))
+            {
+                result += Constants.BASE_URL;
+            }
+
+            // Concat the URL
+            result += productURLMatch.Value;
 
             try
             {
