@@ -412,7 +412,7 @@ namespace AmazonScrape
         /// <returns></returns>
         public static BitmapImage GetImageThumbnail(string itemHtml)
         {
-            string imageURLPattern = @"(?<=imageContainer.*?<img.*?src="").*?(?="".*?class=""productImage"")";
+            string imageURLPattern = @"(http(s?):/)(/[^/]+)+\.(?:jpg|gif|png)";
 
             Match imageURLPatternMatch = Regex.Match(itemHtml, imageURLPattern, RegexOptions.Singleline);
 
