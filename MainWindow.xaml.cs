@@ -16,8 +16,7 @@ namespace AmazonScrape
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {        
-        private ILog _log = LogService.GetLogService(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.FullName);
+    {               
         private BackgroundWorker _scrapeWorker; // Performs async work
                 private List<IValidatable> requireValidation; // list of controls that require validation
 
@@ -25,11 +24,9 @@ namespace AmazonScrape
         {
             // Catch any vague XAML exceptions
             try { InitializeComponent(); }
-            catch (Exception ex)
+            catch
             {
-                _log.Output("Caught problem in InitializeComponent");
-                _log.Output(ex.Message);
-                _log.Output(ex.StackTrace);
+                MessageBox.Show("XAML initialization error.");
             }
 
             this.Icon = ResourceLoader.GetProgramIconBitmap();
