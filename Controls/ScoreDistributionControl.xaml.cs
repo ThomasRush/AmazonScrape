@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Media;
 
 namespace AmazonScrape
 {
@@ -16,7 +18,8 @@ namespace AmazonScrape
         // control values are being set.
         bool resolvingPercentageError = false;
         private RangeSlider[] _sliders;
-
+        private Popup _description;
+        
         public ScoreDistribution Distribution
         {
             get
@@ -41,7 +44,43 @@ namespace AmazonScrape
             _sliders[2] = ThreeStar;
             _sliders[3] = FourStar;
             _sliders[4] = FiveStar;
+
+            string description = "Usage examples: " + Environment.NewLine + Environment.NewLine +
+                " - If you wanted products that had no more than 10% one-star " + Environment.NewLine +
+                " reviews, you would set the one-star review control range to " + Environment.NewLine +
+                " 0 to 10." +
+                Environment.NewLine + Environment.NewLine +
+                " - If you wanted products that had no fewer than 40% five-star" + Environment.NewLine +
+                " reviews, you would set the five-star review control range to " + Environment.NewLine +
+                " 40 to 100.";
+
+
+            _description = new Popup();
+            _description.PlacementTarget = ControlTitle;
+            _description.Placement = PlacementMode.Left;
+            var textBlock = new TextBlock();
+            textBlock.Text = description;
+            textBlock.Foreground = new SolidColorBrush(Colors.Black);
+            textBlock.Background = new SolidColorBrush(Colors.White);
+            _description.Child = textBlock;
+            
+            ControlTitle.MouseEnter += ControlTitle_MouseEnter;
+            ControlTitle.MouseLeave += ControlTitle_MouseLeave;
+
         }
+
+        void ControlTitle_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            _description.IsOpen = true;
+        }
+
+        void ControlTitle_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            _description.IsOpen = false;
+        }
+
+
+
 
         /// <summary>
         /// Returns the sum total of "low" range scores, given a RangeSlider

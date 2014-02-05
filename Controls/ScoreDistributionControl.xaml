@@ -17,6 +17,9 @@
         </Grid.RowDefinitions>
         
         <TextBlock
+            Name="ControlTitle"
+            Cursor="Help"
+            Foreground="Blue"
             Style="{StaticResource TextBlockStyle}"
             FontSize="{x:Static local:Constants.DEFAULT_LARGE_TEXT_SIZE}" >
             Result Percentage per star category
