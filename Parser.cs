@@ -340,7 +340,7 @@ namespace AmazonScrape
         /// <returns></returns>
         public static bool GetFuzzyPrimeEligibility(string itemHtml)
         {
-            string fuzzyPrimeEligibilityPattern = @"Eligible.*?for.*?FREE.*?Super.*?Saver.*?Shipping";
+            string fuzzyPrimeEligibilityPattern = @".*?FREE.*?Shipping";
 
             Match fuzzyPrimeEligibilityMatch = Regex.Match(itemHtml, fuzzyPrimeEligibilityPattern, RegexOptions.Singleline);
 

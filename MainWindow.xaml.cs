@@ -18,7 +18,7 @@ namespace AmazonScrape
     public partial class MainWindow : Window
     {               
         private BackgroundWorker _scrapeWorker; // Performs async work
-                private List<IValidatable> requireValidation; // list of controls that require validation
+        private List<IValidatable> requireValidation; // list of controls that require validation
 
         public MainWindow()
         {
@@ -222,7 +222,8 @@ namespace AmazonScrape
                 priceRange,
                 ScoreDistribution.Distribution,
                 minReviewCount,
-                (bool)chkMatchAll.IsChecked);
+                (bool)chkMatchAll.IsChecked,
+                Constants.USE_STRICT_PRIME_ELIGIBILITY); // strict prime eligibility
         }
 
         /// <summary>

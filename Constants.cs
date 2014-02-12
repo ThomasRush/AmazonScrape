@@ -11,7 +11,11 @@ namespace AmazonScrape
         public const int DEFAULT_RESULT_COUNT = 20;
         public const int DEFAULT_MIN_REVIEWS = 0;
         public const bool DEFAULT_MATCH_ALL_TERMS = false;
-
+        public const bool USE_STRICT_PRIME_ELIGIBILITY = false;
+        // "Fuzzy" Amazon Prime eligibility attempts to infer whether a product
+        // is Prime eligible and is not always accurate. Strict Prime
+        // eligibility requires another page load per item, which decreases
+        // performance, but accurately reports an item's Prime status.
 
         // Major formatting settings 
         // ( other settings are found in .\Resources\ControlStyles.xaml )
