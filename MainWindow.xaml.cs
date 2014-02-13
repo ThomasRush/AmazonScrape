@@ -69,10 +69,8 @@ namespace AmazonScrape
 
             // Set focus to the search control once the window is loaded
             this.Loaded += MainWindow_Loaded;
-
         }
 
-        
         void SearchControl_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -117,7 +115,19 @@ namespace AmazonScrape
         /// <param name="e"></param>
         void dataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if(ResultGrid.SelectedItem == null) return;
+            // If the user is clicking the scrollbar (the arrow
+            // or the "thumb"), don't attempt to open an item in the browser
+            IInputElement element = e.MouseDevice.DirectlyOver;
+            if (element != null && element is FrameworkElement)
+            {
+                var elementType = element.GetType();
+
+                if (elementType == typeof(System.Windows.Controls.Primitives.RepeatButton) ||
+                    elementType == typeof(System.Windows.Controls.Primitives.Thumb))
+                { return; }
+            }
+
+            if (ResultGrid.SelectedItem == null) return;
             AmazonItem item = ResultGrid.SelectedItem as AmazonItem;
             if (item.URL == null)
             {
