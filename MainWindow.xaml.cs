@@ -58,7 +58,7 @@ namespace AmazonScrape
             ResultGrid.MouseDoubleClick += dataGrid_MouseDoubleClick;
             ResultGrid.PreviewMouseLeftButtonDown += dataGrid_PreviewMouseLeftButtonDown;
             ResultGrid.AddImageColumn("ProductImage", "Product", 5, BindingMode.TwoWay);
-            ResultGrid.AddImageColumn("PrimeLogoImage", "Prime", 4, BindingMode.OneWay);
+            ResultGrid.AddImageColumn("PrimeLogoImage", "Prime", 4, BindingMode.OneWay,"IsPrimeEligible");
             ResultGrid.AddTextColumn("Name", "Product Name", 13, mediumTextStyle);
             ResultGrid.AddTextColumn("LowPrice", "Low Price", 5, largeTextStyle);
             ResultGrid.AddTextColumn("HighPrice", "High Price", 5, largeTextStyle);

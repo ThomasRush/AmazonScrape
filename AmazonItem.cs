@@ -55,6 +55,7 @@ namespace AmazonScrape
                 else return null;
             }
         }
+        public bool IsPrimeEligible { get { return (PrimeLogoImage != null); } }
         public String ReviewDistribution 
         { 
             get 
