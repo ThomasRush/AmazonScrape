@@ -17,11 +17,16 @@ using System.Web;
 namespace AmazonScrape
 {
     /// <summary>
-    /// Grabs html from Amazon
+    /// Performs page and image loads and provides methods to
+    /// encode/decode strings.
     /// </summary>
     public static class Scraper
     {
-
+        /// <summary>
+        /// Encodes the supplied string for use as a URL
+        /// </summary>
+        /// <param name="URL">string to encode</param>
+        /// <returns>URL-encoded string</returns>
         public static string EncodeURL(string URL)
         {
             try
@@ -36,16 +41,21 @@ namespace AmazonScrape
             
         }
 
-        public static string DecodeURL(string URL)
+        /// <summary>
+        /// Decodes the HTML-encoded sections of the supplied string
+        /// </summary>
+        /// <param name="html">HTML-encoded string</param>
+        /// <returns>decoded string</returns>
+        public static string DecodeHTML(string html)
         {
             string result = "";
             try
             {
-                result =  HttpUtility.UrlDecode(URL);
+                result = HttpUtility.HtmlDecode(html);
             }
             catch
             {
-                string msg = "Unable to decode URL: " + URL;
+                string msg = "Unable to decode HTML: " + html;
                 throw new ArgumentException(msg);
             }
 

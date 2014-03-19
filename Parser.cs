@@ -208,7 +208,7 @@ namespace AmazonScrape
             if (!productNameMatch.Success)
             { return null; }
 
-            string productName = Scraper.DecodeURL(productNameMatch.Value);
+            string productName = Scraper.DecodeHTML(productNameMatch.Value);
             
             return productName;
         }
