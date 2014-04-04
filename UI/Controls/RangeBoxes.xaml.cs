@@ -1,37 +1,44 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
 namespace AmazonScrape
 {
     /// <summary>
-    /// Interaction logic for UserControl1.xaml
+    /// Interaction logic for RangeBoxes
     /// </summary>
     [global::System.ComponentModel.TypeConverter(typeof(DoubleRangeConverter))]
     public partial class RangeBoxes : UserControl, IValidatable
     {
         protected string _name;
-        //protected TextBoxPlus _lowText;
-        //protected TextBoxPlus _highText;
-
         protected DoubleRange _range = new DoubleRange(); // The allowable range for this control
+
+        public string LowText
+        {
+            get
+            {
+                return TextLow.Text;
+            }
+            set
+            {
+                TextLow.Text = value;
+            }
+        }
+
+        public string HighText
+        {
+            get
+            {
+                return TextHigh.Text;
+            }
+            set
+            {
+                TextHigh.Text = value;
+            }
+        }
 
         public RangeBoxes()
         {
             InitializeComponent();
         }
-
         
         public DoubleRange GetValues()
         {
@@ -65,7 +72,6 @@ namespace AmazonScrape
                     string message = _name + " low value must be numeric.";
                     result.ErrorMessage = message;
                     return result;
-                    //return new ValidationResult(ValidationResult.Status.Error, message);
                 }
             }
 
@@ -79,17 +85,14 @@ namespace AmazonScrape
                     string message = _name + " high value must be numeric.";
                     result.ErrorMessage = message;
                     return result;
-                    //return new ValidationResult(ValidationResult.Status.Error, message);
                 }
             }
-
 
             if (!_range.Contains(low) || !_range.Contains(high))
             {
                 string message = "Specified " + _name + " values are out of allowable range.";
                 result.ErrorMessage = message;
                 return result;
-                //return new ValidationResult(ValidationResult.Status.Error, message);
             }
 
             if (low > high)
@@ -97,12 +100,10 @@ namespace AmazonScrape
                 string message = _name + " low value is greater than high value.";
                 result.ErrorMessage = message;
                 return result;
-                //return new ValidationResult(ValidationResult.Status.Error, message);
             }
 
             return result;
-            //return new ValidationResult(ValidationResult.Status.Valid, "");
-
         }
+
     }
 }

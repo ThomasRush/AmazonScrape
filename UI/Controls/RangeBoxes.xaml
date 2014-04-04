@@ -28,7 +28,7 @@
         x:Name="TextLow"
         Grid.Column="1"
         IsNumericOnly="True"
-        Style="{StaticResource TextBoxPlusXStyle}"/>
+        Style="{StaticResource TextBoxPlusStyle}"/>
 
         <TextBlock
             Grid.Column="2"
@@ -40,7 +40,7 @@
             x:Name="TextHigh"            
             Grid.Column="3"
             IsNumericOnly="True"
-            Style="{StaticResource TextBoxPlusXStyle}"/>
+            Style="{StaticResource TextBoxPlusStyle}"/>
         
     </Grid>
     

@@ -1,4 +1,4 @@
-﻿<!-- Layout is provided here. Control styles are located in Resources\ControlStyles.xaml -->
+﻿<!-- Layout is provided here. Control styles are located in UI\Resources\ControlStyles.xaml -->
 <Window x:Class="AmazonScrape.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -112,7 +112,7 @@
                         MinWidth="100"
                         RequiresValue="True"
                         Text="{x:Static local:Constants.DEFAULT_SEARCH_TEXT}"
-                        Style="{StaticResource TextBoxPlusXStyle}"                    
+                        Style="{StaticResource TextBoxPlusStyle}"                    
                         KeyDown="SearchControl_KeyDown"/>
 
 
@@ -159,9 +159,9 @@
                     IsNumericOnly="True"
                     NumericRange="1,"
                     HorizontalAlignment="Left"
-                    Style="{StaticResource TextBoxPlusXStyle}"
+                    Style="{StaticResource TextBoxPlusStyle}"
                     MinWidth="20"
-                    Text="20"
+                    Text="{x:Static local:Constants.DEFAULT_RESULT_COUNT}"
                     KeyDown="SearchControl_KeyDown"/>
 
                     <TextBlock
@@ -180,9 +180,9 @@
                     IsNumericOnly="True"
                     NumericRange="0,"
                     HorizontalAlignment="Left"
-                    Style="{StaticResource TextBoxPlusXStyle}"
+                    Style="{StaticResource TextBoxPlusStyle}"
                     MinWidth="20"
-                    Text="0"
+                    Text="{x:Static local:Constants.DEFAULT_MIN_REVIEWS}"
                     KeyDown="SearchControl_KeyDown"/>
 
                 <local:RangeBoxes
@@ -190,6 +190,8 @@
                     Grid.Row="5"
                     Grid.Column="1"
                     Grid.ColumnSpan="3"
+                    LowText="{x:Static local:Constants.DEFAULT_LOW_PRICERANGE}"
+                    HighText="{x:Static local:Constants.DEFAULT_HIGH_PRICERANGE}"
                     KeyDown="SearchControl_KeyDown"/>
 
                 <local:ScoreDistributionControl

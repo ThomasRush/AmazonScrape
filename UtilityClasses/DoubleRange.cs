@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AmazonScrape
 {
+    /// <summary>
+    /// Represents a range of double values
+    /// </summary>
     [DebuggerDisplay("Range = {Low},{High}")]
     [global::System.ComponentModel.TypeConverter(typeof(DoubleRangeConverter))]
     public class DoubleRange: NumericRange<double>
@@ -79,7 +78,7 @@ namespace AmazonScrape
 
             string[] boundaries = data.Split(',');
 
-            if (boundaries.Count() != 2)
+            if (boundaries.Length != 2)
             {
                 string msg = "Double Range requires values separated by a comma. Note: you can supply one boundary and leave the other blank, e.g. '0,' means a value zero or greater";
                 throw new FormatException(msg);
@@ -128,29 +127,6 @@ namespace AmazonScrape
             {
                 result += High.ToString();
             }
-
-
-            /*
-            if (!HasLow && !HasHigh)
-            {
-                return "No range specified";
-            }
-
-            if (HasLow && HasHigh)
-            {
-                return "From " + Low.ToString() + " to " + High.ToString();
-            }
-
-            if (HasLow && !HasHigh)
-            {
-                return " greater than or equal to " + Low.ToString();
-            }
-
-            if (HasHigh && !HasLow)
-            {
-                return " less than or equal to " + High.ToString();
-            }
-            */
 
             return result;
         }

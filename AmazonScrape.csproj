@@ -38,6 +38,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -49,7 +50,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\Images\application_icon.ico</ApplicationIcon>
+    <ApplicationIcon>UI\Resources\Images\application_icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -75,39 +79,43 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Constants.cs" />
-    <Compile Include="Controls\DataGridPlus.cs" />
+    <Compile Include="UI\Controls\DataGridPlus.cs" />
     <Compile Include="UtilityClasses\DoubleRangeConverter.cs" />
-    <Compile Include="Result.cs" />
-    <Compile Include="ScoreDistribution.cs" />
-    <Compile Include="Controls\RangeBoxes.xaml.cs">
+    <Compile Include="Model\Structure\Result.cs" />
+    <Compile Include="Model\Structure\ScoreDistribution.cs" />
+    <Compile Include="UI\Controls\RangeBoxes.xaml.cs">
       <DependentUpon>RangeBoxes.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\RangeSlider.xaml.cs">
+    <Compile Include="UI\Controls\RangeSlider.xaml.cs">
       <DependentUpon>RangeSlider.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ScoreDistributionControl.xaml.cs">
+    <Compile Include="UI\Controls\ScoreDistributionControl.xaml.cs">
       <DependentUpon>ScoreDistributionControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\TextBoxPlus.xaml.cs">
+    <Compile Include="UI\Controls\TextBoxPlus.xaml.cs">
       <DependentUpon>TextBoxPlus.xaml</DependentUpon>
     </Compile>
     <Compile Include="UtilityClasses\DoubleRange.cs" />
     <Compile Include="UtilityClasses\IntRange.cs" />
-    <Compile Include="ItemValidator.cs" />
-    <Compile Include="IValidatable.cs" />
-    <Compile Include="Parser.cs" />
+    <Compile Include="Model\Logic\ItemValidator.cs" />
+    <Compile Include="Model\Structure\IValidatable.cs" />
+    <Compile Include="Model\Logic\Parser.cs" />
     <Compile Include="UtilityClasses\NumericRange.cs" />
-    <Compile Include="AmazonItem.cs" />
-    <Compile Include="Page.cs" />
-    <Compile Include="SearchManager.cs" />
-    <Compile Include="Resources\ResourceLoader.cs" />
-    <Compile Include="Scraper.cs" />
-    <Compile Include="SearchCriteria.cs" />
-    <Page Include="Resources\ControlStyles.xaml">
+    <Compile Include="Model\Structure\AmazonItem.cs" />
+    <Compile Include="Model\Logic\PageManager.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Model\Logic\SearchManager.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Resources\ResourceLoader.cs" />
+    <Compile Include="Model\Logic\Scraper.cs" />
+    <Compile Include="Model\Structure\SearchCriteria.cs" />
+    <Page Include="UI\Resources\ControlStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="UI\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -115,23 +123,23 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="UI\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Controls\RangeSlider.xaml">
+    <Page Include="UI\Controls\RangeSlider.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ScoreDistributionControl.xaml">
+    <Page Include="UI\Controls\ScoreDistributionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\TextBoxPlus.xaml">
+    <Page Include="UI\Controls\TextBoxPlus.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\RangeBoxes.xaml">
+    <Page Include="UI\Controls\RangeBoxes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -165,7 +173,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\icon.ico" />
+    <Resource Include="UI\Resources\Images\icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
@@ -185,13 +193,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\application_icon.ico" />
+    <Resource Include="UI\Resources\Images\application_icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\prime_logo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Description.txt" />
+    <Resource Include="UI\Resources\Images\prime_logo.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

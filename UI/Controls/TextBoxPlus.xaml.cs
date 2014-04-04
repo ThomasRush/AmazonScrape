@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace AmazonScrape
 {
@@ -27,10 +19,16 @@ namespace AmazonScrape
             InitializeComponent();
 
             LostFocus += TextBoxPlus_LostFocus;
-            PreviewGotKeyboardFocus += TextBoxPlusX_PreviewGotKeyboardFocus;
+            PreviewGotKeyboardFocus += TextBoxPlus_PreviewGotKeyboardFocus;
+            GotFocus += TextBoxPlus_GotFocus;
         }
 
-        void TextBoxPlusX_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        private void TextBoxPlus_GotFocus(object sender, RoutedEventArgs e)
+        {
+            textBox.SelectAll();
+        }
+
+        void TextBoxPlus_PreviewGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             if (e.OriginalSource == sender)
             {
@@ -135,7 +133,7 @@ namespace AmazonScrape
             return DoubleRange.Parse(data);
         }
 
-        void TextBoxPlusX_OnGotFocus(object sender, EventArgs e)
+        void TextBoxPlus_OnGotFocus(object sender, EventArgs e)
         {
             textBox.SelectAll();
         }

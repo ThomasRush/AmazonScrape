@@ -85,7 +85,6 @@ namespace AmazonScrape
         /// <returns></returns>
         public static string LoadSearchPage(int pageIndex, string searchTerms)
         {
-            // TODO: this needs to break gracefully and report why it broke in debug mode.
             if (searchTerms == null) return "";
 
             // Encode characters that are not URL-friendly
@@ -127,7 +126,8 @@ namespace AmazonScrape
                 Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Background,
                     new DispatcherOperationCallback((f) =>
                     {
-                        ((DispatcherFrame)f).Continue = false; return null;
+                        ((DispatcherFrame)f).Continue = false;
+                        return null;
                     }), frame);
                 Dispatcher.PushFrame(frame);
             }

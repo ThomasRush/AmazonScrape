@@ -8,7 +8,7 @@ namespace AmazonScrape
 {
     // Represents a numeric range of values.
     // Require that the extending classes implement IComparable (numeric types, String, Char, Datetime)
-    // This gets us some compile-time type-checking (DateTime, String & Char throw exceptions when object is instantiated)
+    // This gets us some compile-time type-checking (although DateTime, String & Char still cause runtime exceptions)
     public abstract class NumericRange<T>  where T : IComparable<T>
     {
         // Allow user to specify range after construction, but ensure that the 

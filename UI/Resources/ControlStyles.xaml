@@ -64,8 +64,7 @@
                 <Trigger.ExitActions>
                     <BeginStoryboard>
                         <Storyboard>
-                            <DoubleAnimation To="0.0" Storyboard.TargetProperty="(Effect).Opacity" Duration="00:00:01"/>
-                            
+                            <DoubleAnimation To="0.0" Storyboard.TargetProperty="(Effect).Opacity" Duration="00:00:01"/>                            
                         </Storyboard>
                     </BeginStoryboard>
                 </Trigger.ExitActions>                
@@ -85,7 +84,7 @@
     </Style>
 
     <!-- TextBoxPlus -->
-    <Style TargetType="local:TextBoxPlus" x:Key="TextBoxPlusXStyle">
+    <Style TargetType="local:TextBoxPlus" x:Key="TextBoxPlusStyle">
         <Setter Property="FontSize" Value="{x:Static local:Constants.DEFAULT_MEDIUM_TEXT_SIZE}"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
@@ -164,7 +163,6 @@
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation To="0.0" Storyboard.TargetProperty="(Effect).Opacity" Duration="00:00:01"/>
-
                         </Storyboard>
                     </BeginStoryboard>
                 </Trigger.ExitActions>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media.Imaging;
 
@@ -19,10 +20,10 @@ namespace AmazonScrape
             BitmapImage primeLogoBitmap = new BitmapImage();
             try
             {
-                primeLogoBitmap = new BitmapImage(new Uri("pack://application:,,,/Resources/Images/prime_logo.png", UriKind.RelativeOrAbsolute));
+                primeLogoBitmap = new BitmapImage(new Uri("pack://application:,,,/UI/Resources/Images/prime_logo.png", UriKind.RelativeOrAbsolute));
             }
             catch (Exception)
-            { Console.WriteLine("Can't load prime logo resource."); }
+            { Debug.WriteLine("Can't load prime logo resource."); }
 
             return primeLogoBitmap;
         }
@@ -36,10 +37,10 @@ namespace AmazonScrape
             BitmapImage programIconBitmap = new BitmapImage();
             try
             {
-                programIconBitmap = new BitmapImage(new Uri("pack://application:,,,/Resources/Images/icon.ico", UriKind.RelativeOrAbsolute));
+                programIconBitmap = new BitmapImage(new Uri("pack://application:,,,/UI/Resources/Images/icon.ico", UriKind.RelativeOrAbsolute));
             }
             catch (Exception)
-            { Console.WriteLine("Couldn't load program icon."); }
+            { Debug.WriteLine("Couldn't load program icon."); }
 
             return programIconBitmap;
         }
@@ -55,7 +56,7 @@ namespace AmazonScrape
                 UriParser.Register(new GenericUriParser(GenericUriParserOptions.GenericAuthority), "pack", -1);
 
             ResourceDictionary dict = new ResourceDictionary();
-            Uri uri = new Uri("/Resources/ControlStyles.xaml", UriKind.Relative);
+            Uri uri = new Uri("/UI/Resources/ControlStyles.xaml", UriKind.Relative);
             dict.Source = uri;
             Application.Current.Resources.MergedDictionaries.Add(dict);
 

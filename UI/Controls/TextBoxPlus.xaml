@@ -4,10 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AmazonScrape"
-             x:Name="TextBoxPlusXControl"
+             x:Name="TextBoxPlusControl"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>        
-            <TextBox x:Name="textBox" Text="{Binding ElementName=TextBoxPlusXControl,Path=Text}" Style="{StaticResource TextBoxStyle}"/>        
+            <TextBox x:Name="textBox" Text="{Binding ElementName=TextBoxPlusControl,Path=Text}" Style="{StaticResource TextBoxStyle}"/>        
     </Grid>
 </UserControl>

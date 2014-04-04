@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Globalization;
 
@@ -17,7 +13,7 @@ namespace AmazonScrape
             return sourceType == typeof(string);
         }
 
-        //should return true when destinationtype if 
+        // True if DestinationType is DoubleRange
         public override bool CanConvertTo(
              System.ComponentModel.ITypeDescriptorContext context, Type destinationType)
         {

@@ -47,8 +47,8 @@
         <Slider Name="LowSlider" Grid.Row="2" Grid.Column="2" Orientation="Vertical" Maximum="100" IsSnapToTickEnabled="True" IsTabStop="False" TickFrequency="1" Style="{StaticResource SliderStyle}" />
         <TextBlock Grid.Row="4" Grid.Column="3" FontSize="12" Style="{StaticResource TextBlockStyle}"> to </TextBlock>
         <Slider Name="HighSlider" Grid.Row="2" Grid.Column="4" Orientation="Vertical" Maximum="100" IsSnapToTickEnabled="True" IsTabStop="False" TickFrequency="1" Value="100" Style="{StaticResource SliderStyle}" />
-        <local:TextBoxPlus x:Name="LowText" Grid.Row="4" Grid.Column="2" IsNumericOnly="True" Style="{StaticResource TextBoxPlusXStyle}"/>
-        <local:TextBoxPlus x:Name="HighText" Grid.Row="4" Grid.Column="4" IsNumericOnly="True"   Text="100" Style="{StaticResource TextBoxPlusXStyle}"/>
+        <local:TextBoxPlus x:Name="LowText" Grid.Row="4" Grid.Column="2" IsNumericOnly="True" Style="{StaticResource TextBoxPlusStyle}"/>
+        <local:TextBoxPlus x:Name="HighText" Grid.Row="4" Grid.Column="4" IsNumericOnly="True"   Text="100" Style="{StaticResource TextBoxPlusStyle}"/>
         
     </Grid>
 </UserControl>

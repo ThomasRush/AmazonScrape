@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,8 +18,8 @@ namespace AmazonScrape
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {               
-        private BackgroundWorker _scrapeWorker; // Performs async work
+    {
+        private SearchManager _searchManager; // Oversees product searches
         private List<IValidatable> requireValidation; // list of controls that require validation
 
         public MainWindow()
@@ -29,17 +31,12 @@ namespace AmazonScrape
                 MessageBox.Show("XAML initialization error.");
             }
 
-            this.Icon = ResourceLoader.GetProgramIconBitmap();
-            this.Title = "Amazon Product Scraper";
-            this.WindowState = System.Windows.WindowState.Maximized;
-
-            // Create an async worker that will scrape Amazon and update our progress
-            _scrapeWorker = new BackgroundWorker();
-            _scrapeWorker.WorkerReportsProgress = true;
-            _scrapeWorker.WorkerSupportsCancellation = true;
-            _scrapeWorker.DoWork += ScraperDoWork;
-            _scrapeWorker.ProgressChanged += ScraperProgressChanged;
-            _scrapeWorker.RunWorkerCompleted += ScrapeComplete;
+            Icon = ResourceLoader.GetProgramIconBitmap();
+            Title = "AmazonScrape";
+            
+            Version version = Assembly.GetExecutingAssembly().GetName().Version;
+            Title += " " + version;
+            WindowState = System.Windows.WindowState.Maximized;
 
             // Specify the controls requiring validation
             // (validation properties are set in XAML)
@@ -168,7 +165,7 @@ namespace AmazonScrape
 
             if (item.URL == null)
             {
-                //MessageBox.Show("The item's URL cannot be parsed.");
+                MessageBox.Show("The item's URL cannot be parsed.");
                 return;
             }
             OpenWebpage(item.URL.ToString());            
@@ -185,16 +182,13 @@ namespace AmazonScrape
         {
             StatusTextBox.Text += Environment.NewLine + Environment.NewLine;
             StatusTextBox.Text += "Canceling search! Please be patient.";
-            CancelScrapeWorker();
+            CancelSearch();
         }
 
         void textBox_KeyDown(object sender, KeyEventArgs e)
         {
             // Search if the user presses the enter key on the search box
-            if (e.Key == Key.Enter)
-            {
-                Search();
-            }
+            if (e.Key == Key.Enter) Search();
         }
 
         /// <summary>
@@ -223,17 +217,16 @@ namespace AmazonScrape
         private SearchCriteria GetSearchCriteria()
         {
             DoubleRange priceRange = PriceRange.GetValues();
-            //ForceTextUpdate(
+
             double minReviewCount = Convert.ToDouble(txtMinNumberOfReviews.Text);
 
-            //ForceTextUpdate(
             return new SearchCriteria(txtSearch.Text,
                 Convert.ToDouble(txtNumberOfResults.Text),
                 priceRange,
                 ScoreDistribution.Distribution,
                 minReviewCount,
                 (bool)chkMatchAll.IsChecked,
-                Constants.USE_STRICT_PRIME_ELIGIBILITY); // strict prime eligibility
+                Constants.USE_STRICT_PRIME_ELIGIBILITY);
         }
 
         /// <summary>
@@ -243,7 +236,6 @@ namespace AmazonScrape
         private void Search()
         {
             // Validate the search controls.
-            //ValidationResult result = ValidateControls();
             Result<bool> result = ValidateControls();
 
             if (result.ErrorMessage.Length > 0)
@@ -252,17 +244,30 @@ namespace AmazonScrape
                 return;
             }
 
-            SearchCriteria criteria = GetSearchCriteria();
+            SearchCriteria searchCriteria = GetSearchCriteria();
 
             // Replace the search controls with the progress control(s)
             ShowSearchProgressGrid();
 
-            StatusTextBox.Text = "Loading search results; please be patient.";
+            StatusTextBox.Text = "Loading results. Please be patient.";
             Progress.Value = 0;
             ResultGrid.Items.Clear();
+
+            // Stop any previous search if it's still working
+            // (in practice this should not be necessary)
+            if (_searchManager != null && _searchManager.IsBusy)
+            {
+                string msg = "Please wait one moment before searching. ";
+                MessageBox.Show(msg);
+                _searchManager.CancelAsync();
+            }
             
-            // Begin work
-            _scrapeWorker.RunWorkerAsync(criteria);
+            // Coordinates the actual scraping/parsing/validation/results:            
+            _searchManager = new SearchManager(searchCriteria,
+                Constants.MAX_THREADS);
+            _searchManager.ProgressChanged += ScraperProgressChanged;
+            _searchManager.RunWorkerCompleted += ScrapeComplete;
+            _searchManager.RunWorkerAsync();       
         }
 
         /// <summary>
@@ -294,8 +299,7 @@ namespace AmazonScrape
 
             bg.BeginAnimation(SolidColorBrush.ColorProperty, animation);
 
-            CancelButton.Focus();
-            
+            CancelButton.Focus();            
         }
 
         /// <summary>
@@ -312,62 +316,24 @@ namespace AmazonScrape
 
             // Return focus to the search textbox
             txtSearch.Focus();
-
         }
 
         private void btnSearch_Click(object sender, RoutedEventArgs e)
         { Search(); }
 
-
         /// <summary>
         /// Called when the user cancels a search. May take a few
         /// seconds while it waits for the async thread to be ready.
         /// </summary>
-        private void CancelScrapeWorker()
-        {            
-            _scrapeWorker.CancelAsync();
-
-            // Wait until the cancel is complete
-            while (_scrapeWorker.CancellationPending)
+        private void CancelSearch()
+        {
+            if (_searchManager != null)
             {
-                Scraper.DoEvents();
+                _searchManager.CancelAsync();
             }
 
             // Reset progress bar
             Progress.Value = 0;
-        }
-
-
-        void ScraperDoWork (object sender, DoWorkEventArgs e)
-        {
-            var searchCriteria = e.Argument as SearchCriteria;
-            
-            // Coordinates the actual scraping/parsing/validation/results:
-            SearchManager searchManager = new SearchManager(searchCriteria);
-
-            Result<AmazonItem> result = new Result<AmazonItem>();
-
-            while (searchManager.Working)
-            {
-                // If the user has pressed the Cancel button, 
-                // stop the search manager
-                if (_scrapeWorker.CancellationPending)
-                { searchManager.Working = false; }
-
-                result = searchManager.ProcessNextItem();
-                
-                // Update the status textbox with the result message
-                AppendStatusMessage(result.StatusMessage);
-
-                // If a new result is found (it passed validation), add it to the grid
-                if (result.HasReturnValue)
-                {
-                    AddResultToGrid(result.Value);
-
-                    // Update our progress bar
-                    _scrapeWorker.ReportProgress(searchManager.GetPercentComplete());
-                }
-            }
         }
 
         /// <summary>
@@ -381,25 +347,11 @@ namespace AmazonScrape
             if (message == null || message == "") return;
 
             // Add results to the data grid as soon as they are available
-            // Must do this via dispatch since the objects belong to the
-            // background worker thread
-            Dispatcher.BeginInvoke(DispatcherPriority.Input, new ThreadStart(() =>
-            {
-                try
-                {
-                    StatusTextBox.Text += Environment.NewLine + Environment.NewLine;
-                    StatusTextBox.Text += message;
-                    StatusTextBox.Focus();
-                    StatusTextBox.CaretIndex = StatusTextBox.Text.Length;
-                    StatusTextBox.ScrollToEnd();
-                }
-                catch
-                {
-                    // TODO: How to better report this? As it stands now, every error causes its own
-                    // messagebox, which is chaos if something goes wrong.
-                    //MessageBox.Show("An error has occurred while trying to write to the status messsage area");
-                }
-            }));
+            StatusTextBox.Text += Environment.NewLine + Environment.NewLine;
+            StatusTextBox.Text += message;
+            StatusTextBox.Focus();
+            StatusTextBox.CaretIndex = StatusTextBox.Text.Length;
+            StatusTextBox.ScrollToEnd();
 
         }
 
@@ -411,18 +363,14 @@ namespace AmazonScrape
         {
             if (result == null) return;
             // Add results to the data grid as soon as they are available
-            // Must do this via dispatch since the objects belong to the
-            // background worker thread
-            Dispatcher.BeginInvoke(DispatcherPriority.Input, new ThreadStart(() =>
-            {
                 try
                 { ResultGrid.Items.Add(result); }
                 catch
                 {
-                    //MessageBox.Show("An error has occurred while trying to populate the data grid");
-                    // Supply some kind of error message, but not using a messagebox (each item opens a new modal dialog)
+                    string msg = "Error adding item to the result grid: " +
+                        result.ToString();
+                    Debug.WriteLine(msg);
                 }
-            }));
         }
 
         /// <summary>
@@ -432,32 +380,51 @@ namespace AmazonScrape
         /// <param name="e"></param>
         void ScrapeComplete(object sender, RunWorkerCompletedEventArgs e)        
         {
-            TaskbarItemInfo.ProgressValue = 1.0;
+            _searchManager.CancelAsync();
+            _searchManager.Dispose();
 
-            // If the work manager is no longer working, return
-            // control to the user
+            TaskbarItemInfo.ProgressValue = 1.0;
             Progress.Value = 0;
-            
+
             SolidColorBrush bg = new SolidColorBrush(Colors.Black);
             Progress.Background = bg;
-            
+
             // Show the search controls again
             ShowSearchCriteriaGrid();
 
         }
 
         /// <summary>
-        /// Updates the progressbar
+        /// Called whenever a result comes back. Updates the progress bars.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ScraperProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void ScraperProgressChanged(object sender, ProgressChangedEventArgs args)
         {
-            if (e.ProgressPercentage > 0)
-                TaskbarItemInfo.ProgressValue = e.ProgressPercentage/100.0;
-            // Update the progress bar
-            Progress.Value = e.ProgressPercentage;
+    
+            if (args == null || args.UserState == null ||
+                args.UserState.GetType() != typeof(Result<AmazonItem>)) return;
+
+            Result<AmazonItem> result = (Result<AmazonItem>)args.UserState;
+
+            // Update the status textbox with the result message
+            AppendStatusMessage(result.StatusMessage);
+
+            // If a new result is found (it passed validation), add it to the grid
+            if (result.HasReturnValue) AddResultToGrid(result.Value);
+
+            int intPercent = args.ProgressPercentage;
+            double doublePercent = intPercent / 100.0;
+            
+            // Update progress controls
+            if (intPercent > 0)
+            {
+                    // Progress bars
+                    TaskbarItemInfo.ProgressValue = doublePercent;                    
+                    Progress.Value = intPercent;
+            }
         }
 
-    } // class
-} // namespace
+
+    }
+}

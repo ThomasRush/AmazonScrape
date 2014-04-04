@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace AmazonScrape
 {
+    /// <summary>
+    /// Static methods determine whether the inputs meet the user's
+    /// search criteria
+    /// </summary>
     public static class ItemValidator
     {
         public static bool ValidateItemName(SearchCriteria criteria, string itemName)
