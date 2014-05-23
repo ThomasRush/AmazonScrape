@@ -141,16 +141,18 @@ namespace AmazonScrape
             // Case 2: "Showing X - Y of Z Results" ( >1 page)
             // Case 3: "Your search "<search term here>" did 
             //          not match any products."
-
-            string resultCountPattern = @"(?<=id=""resultCount""><span>Showing ).*?(?= Results)";
+            
+            // Grab the section after the resultCount id attribute
+            // until the next id attribute
+            string resultCountPattern = @"(?<=id=""resultCount"").*?(?= id=)";
             string match = GetSingleRegExMatch(pageHtml, resultCountPattern);
 
-            //Match resultCountStartMatch = Regex.Match(pageHtml, resultCountPattern, RegexOptions.Singleline);
             int resultTotal = 0;
 
             if (match.Length == 0) return resultTotal;
             
-            // Parse out the values, limiting to two maximum (as in Case 2 above)
+            // Parse out the numeric values, 
+            // limiting to two maximum (as in Case 2 above)
             List<Double> resultRange = ParseDoubleValues(match, 2);
 
             switch (resultRange.Count)
@@ -162,7 +164,15 @@ namespace AmazonScrape
                     break;
                 case 2:
                     try
-                    { resultTotal = Convert.ToInt32(resultRange[1] - (resultRange[0] - 1)); }
+                    {
+                        // ParseDoubleValues thinks the hyphen in the results
+                        // denotes a negative number.
+                        // e.g. "17-32 of 65,130" will return 17, -32
+                        // Get the absolute values before subtracting.
+                        resultTotal = Convert.ToInt32(
+                            Math.Abs(resultRange[1]) - 
+                            (Math.Abs(resultRange[0]) - 1));
+                    }
                     catch { }
                     break;
             }
