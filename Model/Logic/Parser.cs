@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -205,8 +205,7 @@ namespace AmazonScrape
             TimeSpan timeOut = new TimeSpan(0, 0, 10);
 
             // Grab the text between each of the results
-            string resultPattern = @"(?<=result_[0-9]?[0-9]).*?(?=clear=)";
-
+            string resultPattern = @"(?<=result_[0-9]?[0-9]).*?(?=result_[0-9]?[0-9])";
             List<string> matches = GetMultipleRegExMatches(pageHtml, resultPattern);
 
             if (matches.Count < resultCount) { return results; }
@@ -226,12 +225,8 @@ namespace AmazonScrape
         /// <returns>Name of product</returns>
         public static string GetProductName(string itemHtml)
         {
-            // The product name is preceded by an h3 tag with a class of "newaps"
-            string productNamePattern = @"(?<=newaps.*?<a href.*?<span.*?>).*?(?=</span>)";
-
+            string productNamePattern = @"(?<=access-title.*?>).*?(?=</)";
             string match = GetSingleRegExMatch(itemHtml, productNamePattern);
-            //Match productNameMatch = Regex.Match(itemHtml,
-            //    productNamePattern, RegexOptions.Singleline);
 
             if (match.Length == 0)
             { return null; }
@@ -250,9 +245,22 @@ namespace AmazonScrape
         /// <returns>DoubleRange representing the product's pricerange</returns>
         public static DoubleRange GetPriceRange(string itemHtml)
         {
-            string pricePattern = @"(?<=li class=""newp"">.*?<a href.*?<span class=""bld lrg red"">).*?(?=</span>)";
+            // Dollarsign and Digits grouped by commas plus decimal
+            // and change (change is required)
+            string dollarCurrencyFormat = @"\$(\d{1,3}(,\d{3})*).(\d{2})";
+
+            // Optional spaces and hyphen
+            string spacesAndHyphen = @"\s+-\s+";
+
+            // Grab the end of the preceeding tag, the dollar amount, and
+            // optionally a hyphen and a high range amount before the
+            // beginning bracket of the next tag
+            string pricePattern = ">" + dollarCurrencyFormat + "(" + spacesAndHyphen + dollarCurrencyFormat + ")?" + "<";
 
             string match = GetSingleRegExMatch(itemHtml, pricePattern);
+
+            // Need to remove the tag beginning and end:
+            match = match.Trim(new char[] { '<', '>' });
 
             if (match.Length == 0)
             { return new DoubleRange(); }
@@ -493,8 +501,9 @@ namespace AmazonScrape
         {
             string html = Scraper.CreateHttpRequest(productURL);
 
-            // Non-prime eligible results call this function with a "0" first parameter; here we look
-            // specifically for "1", which denotes prime eligibility
+            // Non-prime eligible results call this function with a "0" first
+            // parameter; here we look specifically for "1", which 
+            // denotes prime eligibility
             string primeEligiblePattern = @"bbopJS.initialize\(1,";
 
             string match = GetSingleRegExMatch(html, primeEligiblePattern);
@@ -510,13 +519,13 @@ namespace AmazonScrape
         /// <returns></returns>
         public static Uri GetURL(string itemHtml)
         {
-            string productURLPattern = @"(?<=newaps.*?<a href="").*?(?="">)";
-
+            string productURLPattern = @"(?<=http:).*?/dp/.*?(?=/)";
             string match = GetSingleRegExMatch(itemHtml, productURLPattern);
-            //Match productURLMatch = Regex.Match(itemHtml, productURLPattern, RegexOptions.Singleline);
 
             if (match.Length == 0)
             { return null; }
+
+            match = "http:" + match;
 
             string result = "";
 
@@ -554,7 +563,6 @@ namespace AmazonScrape
             string imageURLPattern = @"(http(s?):/)(/[^/]+)+\.(?:jpg|gif|png)";
 
             string match = GetSingleRegExMatch(itemHtml, imageURLPattern);
-            //Match imageURLPatternMatch = Regex.Match(itemHtml, imageURLPattern, RegexOptions.Singleline);
 
             if (match.Length == 0)
             { return null; }
