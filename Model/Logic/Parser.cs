@@ -341,6 +341,21 @@ namespace AmazonScrape
                 // index 1 is 2-star, etc.
                 try
                 {
+                    // The percentage is at the very end of each string
+                    // Work backwards to build the value
+                    var stack = new Stack<char>();
+
+                    for (var strIndex = matches[i].Length - 1; strIndex >= 0; strIndex--)
+                    {
+                        if (!char.IsNumber(matches[i][strIndex]))
+                        {
+                            break;
+                        }
+                        stack.Push(matches[i][strIndex]);
+                    }
+
+                    matches[i] = new string(stack.ToArray());
+                    
                     reviews[4 - i] = Convert.ToDouble(matches[i]);
                 }
                 catch (InvalidCastException)
