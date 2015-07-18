@@ -301,6 +301,16 @@ namespace AmazonScrape
 
             string match = GetSingleRegExMatch(itemHtml, productASINPattern);
             
+            // Occassionally Amazon adds attributes to the end of the tag, so
+            // find the end of attribute containing the ASIN (should be the first
+            // double quote we encounter).
+            int endAttributeIndex = match.IndexOf('"');
+            if (endAttributeIndex > 0)
+            {
+                // Truncate anything after
+                match = match.Substring(0, match.IndexOf('"'));
+            }
+            
             if (match.Length == 0)
             { return null; }
 
