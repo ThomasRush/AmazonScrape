@@ -308,7 +308,7 @@ namespace AmazonScrape
             if (endAttributeIndex > 0)
             {
                 // Truncate anything after
-                match = match.Substring(0, match.IndexOf('"'));
+                match = match.Substring(0, endAttributeIndex);
             }
             
             if (match.Length == 0)
