@@ -30,7 +30,7 @@ namespace AmazonScrape
         // -------------------------------------------------------------------
         // URLS and parameters (used by Scraper/Parser)
         // -------------------------------------------------------------------
-        public const string BASE_URL = @"http://www.amazon.com";
+        public const string BASE_URL = @"www.amazon.com";
         public const string SEARCH_URL = 
             @"http://www.amazon.com/s/field-keywords=";
         public const string SEARCH_URL_PAGE_PARAM = @"&page=";        

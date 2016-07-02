@@ -544,30 +544,36 @@ namespace AmazonScrape
         /// <returns></returns>
         public static Uri GetURL(string itemHtml)
         {
+            bool usingSSL = false;
             string productURLPattern = @"(?<=http:).*?/dp/.*?(?=/)";
             string match = GetSingleRegExMatch(itemHtml, productURLPattern);
 
+            // Check for SSL before calling this an error
             if (match.Length == 0)
-            { return null; }
-
-            match = "http:" + match;
-
-            string result = "";
+            {
+                usingSSL = true;
+                productURLPattern = @"(?<=https:).*?/dp/.*?(?=/)";
+                match = GetSingleRegExMatch(itemHtml, productURLPattern);
+                if (match.Length == 0)
+                {
+                    return null;
+                }
+            }
 
             // NOTE: Amazon SOMETIMES supplies a relative URL
             // (I don't know what determines this)
             // If the base URL is not present, prepend it.
             if (!match.Contains(Constants.BASE_URL))
             {
-                result += Constants.BASE_URL;
+                match = Constants.BASE_URL + match;
             }
 
-            // Concat the URL
-            result += match;
+            if (usingSSL) match = "https:" + match;
+            else match = "http:" + match;
 
-            if (Uri.IsWellFormedUriString(result, UriKind.Absolute))
+            if (Uri.IsWellFormedUriString(match, UriKind.Absolute))
             {
-                return new Uri(result);
+                return new Uri(match);
             }
             else
             {
