@@ -225,7 +225,7 @@ namespace AmazonScrape
         /// <returns>Name of product</returns>
         public static string GetProductName(string itemHtml)
         {
-            string productNamePattern = @"(?<=access-title.*?>).*?(?=</)";
+            string productNamePattern = @"(?<= title="").*?(?="" )";
             string match = GetSingleRegExMatch(itemHtml, productNamePattern);
 
             if (match.Length == 0)
@@ -537,6 +537,17 @@ namespace AmazonScrape
         }
 
         /// <summary>
+        /// Returns product ASIN - unique product identifier, used in URLs
+        /// </summary>
+        /// <param name="itemHtml"></param>
+        /// <returns>String ASIN value</returns>
+        public static string GetProductAsin(string itemHtml)
+        {
+            string productAsinPattern = @"(?<=data-asin="").*?(?="" )";
+            return GetSingleRegExMatch(itemHtml, productAsinPattern);
+        }
+
+        /// <summary>
         /// Extracts a product's Amazon URL.
         /// </summary>
         /// Used when user clicks to access the product's Amazon listing.
@@ -544,36 +555,12 @@ namespace AmazonScrape
         /// <returns></returns>
         public static Uri GetURL(string itemHtml)
         {
-            bool usingSSL = false;
-            string productURLPattern = @"(?<=http:).*?/dp/.*?(?=/)";
-            string match = GetSingleRegExMatch(itemHtml, productURLPattern);
+            string asin = GetProductAsin(itemHtml);
+            string url = "https://" + Constants.BASE_URL + "/dp/" + asin;
 
-            // Check for SSL before calling this an error
-            if (match.Length == 0)
+            if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
             {
-                usingSSL = true;
-                productURLPattern = @"(?<=https:).*?/dp/.*?(?=/)";
-                match = GetSingleRegExMatch(itemHtml, productURLPattern);
-                if (match.Length == 0)
-                {
-                    return null;
-                }
-            }
-
-            // NOTE: Amazon SOMETIMES supplies a relative URL
-            // (I don't know what determines this)
-            // If the base URL is not present, prepend it.
-            if (!match.Contains(Constants.BASE_URL))
-            {
-                match = Constants.BASE_URL + match;
-            }
-
-            if (usingSSL) match = "https:" + match;
-            else match = "http:" + match;
-
-            if (Uri.IsWellFormedUriString(match, UriKind.Absolute))
-            {
-                return new Uri(match);
+                return new Uri(url);
             }
             else
             {
@@ -608,7 +595,5 @@ namespace AmazonScrape
                 return null;
             }
         }
-
-
     }
 }
